@@ -101,13 +101,13 @@ if test ! -d online ; then
   git clone "$COLLABORA_ONLINE_REPO" online || exit 1
 fi
 
-( cd online && git fetch --all && git checkout -f $COLLABORA_ONLINE_BRANCH && git clean -f -d && git pull -r ) || exit 1
+( cd online && git fetch --all && git checkout -f $COLLABORA_ONLINE_BRANCH && git clean -f -d && git pull -r origin $COLLABORA_ONLINE_BRANCH ) || exit 1
 
 
 # brand repo
-if test ! -d online-branding ; then
-  git clone git@gitlab.collabora.com:productivity/online-branding.git online-branding || echo "Could not clone this proprietary repo"
-fi
+# if test ! -d online-branding ; then
+#   git clone git@gitlab.collabora.com:productivity/online-branding.git online-branding || echo "Could not clone this proprietary repo"
+# fi
 
 if test -d online-branding ; then
   ( cd online-branding && git pull -r ) || exit 1
@@ -149,7 +149,7 @@ fi
 if [ -z "$NO_DOCKER_IMAGE" ]; then
   cd "$SRCDIR"
   cp ../from-packages/scripts/start-collabora-online.sh .
-  docker build --no-cache -t $DOCKER_HUB_REPO:$DOCKER_HUB_TAG -f $HOST_OS . || exit 1
+  sudo docker build --no-cache -t $DOCKER_HUB_REPO:$DOCKER_HUB_TAG -f $HOST_OS . || exit 1
 else
   echo "Skipping docker image build"
 fi;
